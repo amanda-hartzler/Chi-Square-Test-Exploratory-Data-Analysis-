@@ -1,0 +1,125 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+Import Libraries: 
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(readr)
+library (visdat)
+library(superml)
+library(plyr)
+library(factoextra)
+```
+
+Import data file & preview data: 
+```{r}
+df <- read_csv('/Users/Amanda.Hartzler/Desktop/Data_Analytics_Masters/D207/churn_clean.csv')
+head(df)
+```
+
+Create a contingency/two-way table with the Churn & TechSupport variables.
+```{r}
+table(df$Churn, df$TechSupport) #(Soetewey, 2020)
+```
+
+Create Barplot to visually represent the data. 
+```{r}
+ggplot(df) +
+  aes(x = Churn, fill = TechSupport) +
+  geom_bar(position = "dodge")
+#(Soetewey, 2020)
+```
+Chi-Square Test: 
+```{r}
+test <- chisq.test(table(df$Churn, df$TechSupport))
+test
+#(Soetewey, 2020)
+```
+
+Create Income Histogram:
+```{r}
+hist(df$Income, 
+     main = 'Annual Income of Customers', 
+     xlab = 'Annual Income (US Dollars $)', 
+     border = 'black', 
+     col = '#044da4', 
+     xaxp=c(0,250000,10))
+abline(h=seq(0,5000,1000), col="gray", lty="dotted" )
+#(Palay, 2015)
+```
+
+Summary of Income Column:
+```{r}
+summary(df$Income)
+```
+
+Create Outage_sec_perweek Histogram: 
+```{r}
+hist(df$Outage_sec_perweek, 
+     main = 'Outage Seconds Per Week for Customers', 
+     xlab = 'Outage Per Week (Seconds)', 
+     border = 'black',
+     col = '#a75a12',
+     breaks = seq(0,25,2.5),  
+     xaxp = c(0,25,5))
+abline(h=seq(0,3000,500), col="gray", lty="dotted" )
+#(Palay, 2015)
+```
+Summary of Outage_sec_perweek Column:
+```{r}
+summary(df$Outage_sec_perweek)
+```
+
+Create Bar Chart of InternetService:
+```{r}
+counts <- table(df$InternetService)
+barplot(counts, main="Distribution of Internet Service Types",
+   xlab="Internet Service Types", 
+   ylab="Count", 
+   border = 'black',
+   col = '#0e6d05')
+abline(h=seq(0,4000,1000), col="gray", lty="dotted" )
+```
+
+Summary of InternetService Column:
+```{r}
+table(df$InternetService)
+#(2021)
+```
+
+Create Bar Chart of Contract:
+```{r}
+counts <- table(df$Contract)
+barplot(counts, main="Type of Customer Contracts Distribution",
+   xlab="Type of Contract", 
+   ylab="Count", 
+   border = 'black',
+   col = '#6d0691')
+abline(h=seq(0,5000,1000), col="gray", lty="dotted" )
+```
+
+Summary of Contract Column:
+```{r}
+table(df$Contract)
+#(2021)
+```
+
+Scatterplot of Income vs Outage_sec_perweek:
+```{r}
+attach(df)
+plot(Income, Outage_sec_perweek, main="Annual Income vs. Outage per Week",
+   xlab="Annual Income (US Dollars $)", ylab="Average Outage per Week (Seconds)",
+   col = '#91060f', pch=19)
+#(Kabakoff, 2017)
+```
+
+Create Barplot of InternetService vs. Contract:
+```{r}
+ggplot(df) +
+  aes(x = InternetService, fill = Contract) +
+  geom_bar(position = "dodge")
+#(Soetewey, 2020)
+```
